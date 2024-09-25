@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Fibonacci {
+public class Fibonaci {
     public static void main(String[] args) {
         Scanner v = new Scanner(System.in);
         System.out.print("Masukkan jumlah deret angka fibonaci : ");
@@ -18,6 +18,6 @@ public class Fibonacci {
         // }
         // System.out.println();
         System.out.print("Masukkan jumlah deret angka fibonaci yang akan dicari : ");
-        int cari = v.nextInt();
+        v.close();
     }
 }
