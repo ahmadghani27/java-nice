@@ -1,0 +1,105 @@
+Penjelasan Kompleksitas Waktu:
+O(n): Kompleksitas terbaik, di mana algoritma melakukan tugasnya dalam waktu linear.
+O(n log n): Kompleksitas terbaik untuk banyak algoritma sorting, di mana waktu eksekusi tumbuh lebih lambat dibandingkan dengan O(n^2).
+O(n^2): Kompleksitas terburuk untuk algoritma seperti Bubble Sort dan Insertion Sort, di mana waktu eksekusi tumbuh dengan kuadrat dari jumlah elemen.
+
+---------------------------------------
+Hasil sorting menggunakan Bubble Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 6252 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n)
+Kasus Rata-rata: O(n^2)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Bubble Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 6151 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n)
+Kasus Rata-rata: O(n^2)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Bubble Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 6122 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n)
+Kasus Rata-rata: O(n^2)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Quick Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 9067 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Quick Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 9689 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Quick Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 8706 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Quick Sort:
+[1, 2, 2, 3]
+Waktu eksekusi: 9688 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Quick Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 8226 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n^2)
+
+---------------------------------------
+Hasil sorting menggunakan Merge Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 11512 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n log n)
+
+---------------------------------------
+Hasil sorting menggunakan Merge Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 11632 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n log n)
+
+---------------------------------------
+Hasil sorting menggunakan Merge Sort:
+[1, 2, 3, 4]
+Waktu eksekusi: 12754 nanodetik
+Analisis Kompleksitas Waktu:
+Kasus Terbaik: O(n log n)
+Kasus Rata-rata: O(n log n)
+Kasus Terburuk: O(n log n)
+
+---------------------------------------
