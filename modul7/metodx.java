@@ -15,7 +15,7 @@ public class metodx {
     public static void main(String[] args) {
         metodx mt = new metodx();
         mt.hitungLuasLingkaran(10);
-        System.out.print(mt.luas_lingkaran(20));
+        System.out.println(mt.luas_lingkaran(20));
         System.exit(0);
     }
 }

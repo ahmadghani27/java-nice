@@ -1,4 +1,4 @@
-public class selection {
+public class Selection {
     public static void main(String[] args) {
         int[] tabel = { 2, 4, 3, 1, 6, 7, 4, 9, 4, 8 };
         int p, k, j;
