@@ -70,7 +70,7 @@ public class StudentRecord {
     }
 
     public void print(double getAverage, double englishG, double mathG, double scienceG) {
-        System.out.println("Rerata:" + average);
+        System.out.println("Average:" + average);
         System.out.println("Math Grade:" + mathG);
         System.out.println("English Grade:" + englishG);
         System.out.println("Science Grade:" + scienceG);
