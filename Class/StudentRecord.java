@@ -64,15 +64,15 @@ public class StudentRecord {
     }
 
     public void print(String temp) {
-        System.out.println("Name\t\t:" + name);
-        System.out.println("Address\t\t:" + address);
-        System.out.println("Age\t\t:" + age);
+        System.out.println("Name\t\t: " + name);
+        System.out.println("Address\t\t: " + address);
+        System.out.println("Age\t\t: " + age);
     }
 
     public void print(double getAverage, double englishG, double mathG, double scienceG) {
-        System.out.println("Math Grade\t:" + mathG);
-        System.out.println("English Grade\t:" + englishG);
-        System.out.println("Science Grade\t:" + scienceG);
-        System.out.println("Average\t\t:" + average);
+        System.out.println("Math Grade\t: " + mathG);
+        System.out.println("English Grade\t: " + englishG);
+        System.out.println("Science Grade\t: " + scienceG);
+        System.out.println("Average\t\t: " + average);
     }
 }
