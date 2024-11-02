@@ -2,18 +2,31 @@ package Class;
 
 public class StudentRCexample {
     public static void main(String[] args) {
-        StudentRecord annaRecord = new StudentRecord();
-        annaRecord.setName("Anna");
-        annaRecord.setAddress("Philippines");
-        annaRecord.setAge(15);
-        annaRecord.setMathG((double) 80);
-        annaRecord.setEnglishG((double) 95.5);
-        annaRecord.setScienceG((double) 100);
+        StudentRecord iwanRecord = new StudentRecord();
+        iwanRecord.setName("Iwan Perdamaean");
+        iwanRecord.setAddress("Riau");
+        iwanRecord.setAge(17);
+        iwanRecord.setMathG((double) 80);
+        iwanRecord.setEnglishG((double) 95.5);
+        iwanRecord.setScienceG((double) 100);
         // overload
-        annaRecord.print(annaRecord.getName());
-        annaRecord.print(annaRecord.getAverage(), annaRecord.getEnglishG(),
-                annaRecord.getMathG(),
-                annaRecord.getScienceG());
+        iwanRecord.print(iwanRecord.getName());
+        iwanRecord.print(iwanRecord.getAverage(), iwanRecord.getEnglishG(),
+                iwanRecord.getMathG(),
+                iwanRecord.getScienceG());
+
+        StudentRecord ediRecord = new StudentRecord();
+        ediRecord.setName("Edi Suharto");
+        ediRecord.setAddress("Jawa Tengah");
+        ediRecord.setAge(15);
+        ediRecord.setMathG((double) 95);
+        ediRecord.setEnglishG((double) 95.5);
+        ediRecord.setScienceG((double) 91.5);
+        // overload
+        ediRecord.print(ediRecord.getName());
+        ediRecord.print(ediRecord.getAverage(), ediRecord.getEnglishG(),
+                ediRecord.getMathG(),
+                ediRecord.getScienceG());
 
     }
 }
