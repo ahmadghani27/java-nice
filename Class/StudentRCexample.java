@@ -17,7 +17,6 @@ public class StudentRCexample {
                 iwanRecord.getScienceG());
 
         System.out.println();
-
         StudentRecord ediRecord = new StudentRecord();
         ediRecord.setName("Edi Suharto");
         ediRecord.setAddress("Jawa Tengah");
