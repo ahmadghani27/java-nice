@@ -25,4 +25,3 @@ public class StudentRCexample {
         ediRecord.print(ediRecord.getAverage(), ediRecord.getEnglishG(),ediRecord.getMathG(),ediRecord.getScienceG());
     }
 }
-
