@@ -6,7 +6,7 @@ public class StudentRCexample {
         iwanRecord.setName("Iwan Perdamaean");
         iwanRecord.setAddress("Riau");
         iwanRecord.setAge(17);
-        iwanRecord.setMathG((double) 80);
+        iwanRecord.setMathG((double) 88);
         iwanRecord.setEnglishG((double) 95.5);
         iwanRecord.setScienceG((double) 100);
         // overload
