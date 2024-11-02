@@ -10,11 +10,8 @@ public class StudentRCexample {
         iwanRecord.setMathG((double) 88);
         iwanRecord.setEnglishG((double) 95.5);
         iwanRecord.setScienceG((double) 100);
-        // overload
         iwanRecord.print(iwanRecord.getName());
-        iwanRecord.print(iwanRecord.getAverage(), iwanRecord.getEnglishG(),
-                iwanRecord.getMathG(),
-                iwanRecord.getScienceG());
+        iwanRecord.print(iwanRecord.getAverage(), iwanRecord.getEnglishG(),iwanRecord.getMathG(),iwanRecord.getScienceG());
 
         System.out.println();
         StudentRecord ediRecord = new StudentRecord();
@@ -24,12 +21,8 @@ public class StudentRCexample {
         ediRecord.setMathG((double) 95);
         ediRecord.setEnglishG((double) 95.5);
         ediRecord.setScienceG((double) 91.5);
-        // overload
         ediRecord.print(ediRecord.getName());
-        ediRecord.print(ediRecord.getAverage(), ediRecord.getEnglishG(),
-                ediRecord.getMathG(),
-                ediRecord.getScienceG());
-
+        ediRecord.print(ediRecord.getAverage(), ediRecord.getEnglishG(),ediRecord.getMathG(),ediRecord.getScienceG());
     }
 }
 
