@@ -9,6 +9,7 @@ public class MenuUtama extends JFrame {
   private JLabel JLtitle, JLinputID;
   private JTextField JTinputID;
   private JButton JBtenter;
+  private String konter;
 
   public MenuUtama() {
     setTitle("Listrik - iAN Konter");
@@ -20,8 +21,14 @@ public class MenuUtama extends JFrame {
     Dimension window = Toolkit.getDefaultToolkit().getScreenSize();
     int x = (window.width - 640) / 2; 
     int y = (window.height - 400) / 2; 
-
     setLocation(x, y);
+
+    JLtitle = new JLabel("iAN Konter");
+    setBounds(x, y, x, y);
+  }
+
+  public void InputID(){
+
   }
 
   public static void main(String[] args) {
