@@ -167,7 +167,7 @@ public class MenuUtama extends JFrame {
     }
 });
        jScrollPane = new JScrollPane(TabelRiwayat);
-       jScrollPane.setBounds(50, 40, 540, 130); 
+       jScrollPane.setBounds(50, 90, 540, 130); 
        add(jScrollPane);
 
 // jScrollPane.setViewportView( TabelRiwayat);
