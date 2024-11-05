@@ -166,18 +166,18 @@ public class MenuUtama extends JFrame {
         return canEdit [columnIndex];
     }
 });
-//        jScrollPane = new JScrollPane(TabelRiwayat);
-//        jScrollPane.setBounds(50, 200, 540, 150); 
-//        add(jScrollPane);
+       jScrollPane = new JScrollPane(TabelRiwayat);
+       jScrollPane.setBounds(50, 40, 540, 130); 
+       add(jScrollPane);
 
-jScrollPane.setViewportView( TabelRiwayat);
+// jScrollPane.setViewportView( TabelRiwayat);
 
-if ( TabelRiwayat.getColumnModel().getColumnCount() > 0) {
-     TabelRiwayat.getColumnModel().getColumn(0).setResizable(false);
-     TabelRiwayat.getColumnModel().getColumn(1).setResizable(false);
-     TabelRiwayat.getColumnModel().getColumn(2).setResizable(false);
-     TabelRiwayat.getColumnModel().getColumn(3).setResizable(false);
-}
+// if ( TabelRiwayat.getColumnModel().getColumnCount() > 0) {
+//      TabelRiwayat.getColumnModel().getColumn(0).setResizable(false);
+//      TabelRiwayat.getColumnModel().getColumn(1).setResizable(false);
+//      TabelRiwayat.getColumnModel().getColumn(2).setResizable(false);
+//      TabelRiwayat.getColumnModel().getColumn(3).setResizable(false);
+// }
 
     
     JBkeluar = new JButton();
@@ -193,8 +193,8 @@ if ( TabelRiwayat.getColumnModel().getColumnCount() > 0) {
     //         jButton2MouseExited(evt);
     //     }
     // });
-    JBkeluar.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
+    JBkeluar.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
           System.exit(0);
         }
     });
