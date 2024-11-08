@@ -63,7 +63,7 @@ public class InputID extends JFrame {
         jBinputID.setFont(openSans.deriveFont(32f));
         jBinputID.setForeground(Color.WHITE);
         jBinputID.setText("Enter");
-        jBinputID.addActionListener(evt -> jBinputIDActionPerformed(evt));
+        jBinputID.addActionListener(evt -> ActionMenu(evt));
         jPanel1.add(jBinputID);
         jBinputID.setBounds(74, 147, 450, 55);
 
@@ -114,7 +114,7 @@ public class InputID extends JFrame {
         });
     }
 
-    private void jBinputIDActionPerformed(java.awt.event.ActionEvent evt) {
+    private void ActionMenu(java.awt.event.ActionEvent evt) {
         MenuUtama menuUtama = new MenuUtama();
         menuUtama.setVisible(true);
         this.dispose();
