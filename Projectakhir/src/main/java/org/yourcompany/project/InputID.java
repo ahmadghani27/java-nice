@@ -48,7 +48,7 @@ public class InputID extends JFrame {
         jTFinputID = new JTextField();
         jBinputID = new JButton("Enter");
         jLtitle1 = new JLabel("Input ID Meteran", SwingConstants.CENTER);
-        jLInput = new JLabel("Input tidak valid", JLabel.CENTER);
+        jLInput = new JLabel("Input tidak valid");
         loadCustomFont();
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -108,7 +108,7 @@ public class InputID extends JFrame {
             }
         });
     }
-    
+
 
     private void ActionMenu() {
         String inputID = jTFinputID.getText();
