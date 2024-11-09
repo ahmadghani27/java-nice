@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class MySQLConnector {
 
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/test";
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/DataBaseIanKonter";
     private static final String DATABASE_USER = "root";
     private static final String DATABASE_PASSWORD = "";
 
@@ -26,6 +26,18 @@ public class MySQLConnector {
         }
         return connection;
     }
+
+    public void closeConnection(Connection connection) {
+            if (connection != null) {
+                try {
+                    connection.close();
+                    System.out.println("Database connection closed.");
+                } catch (SQLException e) {
+                    System.out.println("Failed to close the database connection.");
+                    e.printStackTrace();
+                }
+            }
+        }
 
     public static void main(String[] args) {
         MySQLConnector connector = new MySQLConnector(); // Membuat instance dari MySQLConnector

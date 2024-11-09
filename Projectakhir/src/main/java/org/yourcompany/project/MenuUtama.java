@@ -1,12 +1,10 @@
 package org.yourcompany.project;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
+import java.io.*;
+import java.sql.*;
 
 import com.sun.jdi.connect.Connector;
 
@@ -25,6 +23,10 @@ public class MenuUtama extends JFrame {
     private JPanel jPanel2;
     private JTextField jTFinputID1;
     private Font openSansFont;
+
+    private static final String URL = "jdbc:mysql://localhost:3306/DataBaseIanKonter";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
 
     public MenuUtama() {
         try {
@@ -144,7 +146,7 @@ public class MenuUtama extends JFrame {
 
         jLIDPLN2.setFont(new Font("sansserif", 2, 24));
         jLIDPLN2.setHorizontalAlignment(SwingConstants.LEFT);
-        jLIDPLN2.setText("ID PLN                :");
+        jLIDPLN2.setText("ID PLN                : " );
         jPanel1.add(jLIDPLN2);
         jLIDPLN2.setBounds(20, 10, 480, 60);
 
@@ -193,6 +195,15 @@ public class MenuUtama extends JFrame {
     }
 
     private void jBKeluarActionPerformed(ActionEvent evt) {
+        MySQLConnector connector = new MySQLConnector();
+        Connection connection = null;
+
+        try {
+            connection = connector.connect();
+        } finally {
+            connector.closeConnection(connection);
+        }
+
         System.exit(0);
     }
 
@@ -202,9 +213,21 @@ public class MenuUtama extends JFrame {
     private void jBriwayatActionPerformed(ActionEvent evt) {
     }
 
-    public void Connector(){
+    public void Connector() {
         MySQLConnector connector = new MySQLConnector(); // Membuat instance dari MySQLConnector
         Connection connection = connector.connect(); // Memanggil metode connect
+    }
+
+    public void ID(String inputID) {
+        String selectQuery = "SELECT * FROM id_pelanggan WHERE ID_Pelanggan = ?";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD); PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
+
+            selectStmt.setString(1, inputID);
+            ResultSet ID_Pelanggan = selectStmt.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String args[]) {
