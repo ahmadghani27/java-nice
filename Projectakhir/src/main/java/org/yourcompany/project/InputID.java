@@ -81,7 +81,7 @@ public class InputID extends JFrame {
         jLInput.setFont(openSans.deriveFont(12f));
         jLInput.setForeground(Color.RED);
         jLInput.setVisible(false);
-        jLInput.setBounds(30, 115, 440, 15);
+        jLInput.setBounds(80, 115, 440, 15);
         jPanel1.add(jLInput);
 
         pack();

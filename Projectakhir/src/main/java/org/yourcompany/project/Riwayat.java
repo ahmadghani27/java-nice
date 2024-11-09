@@ -3,11 +3,25 @@ package org.yourcompany.project;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Riwayat extends JFrame {
+    private Font openSansFont;
 
     public Riwayat() {
+        loadCustomFont();
         initComponents();
+    }
+
+    private void loadCustomFont() {
+        try {
+            openSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\Github\\java-nice\\Projectakhir\\src\\main\\java\\org\\yourcompany\\project\\OpenSans-Regular.ttf")).deriveFont(24f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(openSansFont);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initComponents() {
@@ -31,7 +45,7 @@ public class Riwayat extends JFrame {
         jFrame1.getContentPane().setLayout(null);
 
         jPanel2.setForeground(new Color(51, 0, 102));
-        jTFinputID1.setFont(new Font("SansSerif", 0, 36));
+        jTFinputID1.setFont(openSansFont); // Set custom font
         jTFinputID1.setHorizontalAlignment(JTextField.CENTER);
         jTFinputID1.setText("Meteran");
         jTFinputID1.setBorder(new javax.swing.border.LineBorder(new Color(51, 0, 153), 1, true));
@@ -44,7 +58,7 @@ public class Riwayat extends JFrame {
         });
 
         jBinputID1.setBackground(new Color(51, 153, 255));
-        jBinputID1.setFont(new Font("SansSerif", 0, 32));
+        jBinputID1.setFont(openSansFont); // Set custom font
         jBinputID1.setForeground(Color.WHITE);
         jBinputID1.setText("Enter");
         jBinputID1.setBorder(new javax.swing.border.LineBorder(Color.BLACK, 0, true));
@@ -76,9 +90,9 @@ public class Riwayat extends JFrame {
         );
 
         jFrame1.getContentPane().add(jPanel2);
-        jPanel2.setBounds(60, 110, 520, 250);
+        jPanel2.setBounds (60, 110, 520, 250);
 
-        jLtitle2.setFont(new Font("SansSerif", 1, 48));
+        jLtitle2.setFont(openSansFont); // Set custom font
         jLtitle2.setHorizontalAlignment(SwingConstants.CENTER);
         jLtitle2.setText("Input ID Meteran");
         jFrame1.getContentPane().add(jLtitle2);
@@ -92,7 +106,7 @@ public class Riwayat extends JFrame {
         jPanel1.setLayout(null);
 
         jBKeluar.setBackground(Color.RED);
-        jBKeluar.setFont(new Font("SansSerif", 0, 32));
+        jBKeluar.setFont(openSansFont); // Set custom font
         jBKeluar.setForeground(Color.WHITE);
         jBKeluar.setText("Menu Utama");
         jBKeluar.setBorder(javax.swing.BorderFactory.createLineBorder(Color.BLACK, 0));
@@ -105,7 +119,7 @@ public class Riwayat extends JFrame {
         jPanel1.add(jBKeluar);
         jBKeluar.setBounds(290, 500, 210, 60);
 
-        jLIDPLN2.setFont(new Font("sansserif", 2, 24));
+        jLIDPLN2.setFont(openSansFont); // Set custom font
         jLIDPLN2.setHorizontalAlignment(SwingConstants.LEFT);
         jLIDPLN2.setText("ID PLN                :");
         jPanel1.add(jLIDPLN2);
@@ -131,6 +145,7 @@ public class Riwayat extends JFrame {
             }
         });
         jTable1.setColumnSelectionAllowed(true);
+        jTable1.setRowHeight(24); // Set the row height to 24 pixels
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1);
@@ -139,7 +154,7 @@ public class Riwayat extends JFrame {
         getContentPane().add(jPanel1);
         jPanel1.setBounds(60, 90, 520, 610);
 
-        jLtitle.setFont(new Font("SansSerif", 1, 48));
+        jLtitle.setFont(openSansFont); // Set custom font
         jLtitle.setHorizontalAlignment(SwingConstants.CENTER);
         jLtitle.setText("Riwayat Transaksi");
         getContentPane().add(jLtitle);
