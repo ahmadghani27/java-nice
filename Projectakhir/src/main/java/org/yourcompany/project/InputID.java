@@ -29,7 +29,7 @@ import javax.swing.SwingConstants;
 public class InputID extends JFrame {
 
     private JPanel jPanel1;
-    private JTextField jTFinputID;
+    private JTextField jTFinputID, jTFinputUsr;
     private JButton jBinputID;
     private JLabel jLtitle1, jLInput;
     private Font openSans;
@@ -45,7 +45,8 @@ public class InputID extends JFrame {
 
     private void initComponents() {
         jPanel1 = new JPanel();
-        jTFinputID = new JTextField();
+        jTFinputID = new JTextField("ID Meteran");
+        jTFinputUsr = new JTextField("Nama Pelanggan");
         jBinputID = new JButton("Enter");
         jLtitle1 = new JLabel("Input ID Meteran", SwingConstants.CENTER);
         jLInput = new JLabel("Input tidak valid");
@@ -64,14 +65,21 @@ public class InputID extends JFrame {
         jTFinputID.setBounds(74, 41, 450, 75);
         jPanel1.add(jTFinputID);
 
+        jTFinputUsr.setFont(openSans.deriveFont(36f));
+        jTFinputUsr.setHorizontalAlignment(JTextField.CENTER);
+        jTFinputUsr.setBorder(BorderFactory.createLineBorder(new Color(51, 0, 153), 1));
+        jTFinputUsr.setMargin(new Insets(8, 8, 8, 8));
+        jTFinputUsr.setBounds(74, 147, 450, 75);
+        jPanel1.add(jTFinputUsr);
+
         jBinputID.setBackground(new Color(51, 153, 255));
         jBinputID.setFont(openSans.deriveFont(32f));
         jBinputID.setForeground(Color.WHITE);
-        jBinputID.setBounds(74, 147, 450, 55);
+        jBinputID.setBounds(74, 253, 450, 55);
         jBinputID.addActionListener(evt -> ActionMenu());
         jPanel1.add(jBinputID);
 
-        jPanel1.setBounds(20, 120, 600, 250);
+        jPanel1.setBounds(20, 120, 600, 320);
         getContentPane().add(jPanel1);
 
         jLtitle1.setFont(openSans.deriveFont(48f));

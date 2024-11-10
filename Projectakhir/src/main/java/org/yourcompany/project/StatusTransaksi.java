@@ -1,8 +1,11 @@
 package org.yourcompany.project;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -87,7 +90,7 @@ public class StatusTransaksi extends JFrame {
         jLtitle3.setBounds(80, 20, 470, 60);
         getContentPane().add(jLtitle3);
 
-        jTextField1.setBackground(new java.awt.Color(255, 51 , 0));
+        jTextField1.setBackground(new java.awt.Color(255, 51 , 0 ));
         jTextField1.setFont(openSansFont);  // Set custom font for text field
         jTextField1.setForeground(new java.awt.Color(153, 255, 255));
         jTextField1.setHorizontalAlignment(JTextField.CENTER);
@@ -95,10 +98,18 @@ public class StatusTransaksi extends JFrame {
         jTextField1.addActionListener(evt -> jTextField1ActionPerformed(evt));
         getContentPane().add(jTextField1);
 
+        jBBack.setBackground(new Color(255, 0, 0));
         jBBack.setFont(openSansFont); // Set custom font for back button
-        jBBack.setBounds(90, 340, 150, 50); // Set position and size
-        jBBack.addActionListener(evt -> backButtonActionPerformed(evt)); // Add action listener
-        getContentPane().add(jBBack); // Add button to the frame
+        jBBack.setForeground(Color.WHITE);
+        jBBack.setText("Keluar");
+        jBBack.setBorder(null);
+        jBBack.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                backButtonActionPerformed(evt); // Corrected action listener
+            }
+        });
+        getContentPane().add(jBBack);
+        jBBack.setBounds(340, 590, 210, 60);
 
         pack();
     }

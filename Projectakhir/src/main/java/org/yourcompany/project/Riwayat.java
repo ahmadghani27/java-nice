@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Riwayat extends JFrame {
+
     private Font openSansFont;
 
     public Riwayat() {
@@ -90,7 +91,7 @@ public class Riwayat extends JFrame {
         );
 
         jFrame1.getContentPane().add(jPanel2);
-        jPanel2.setBounds (60, 110, 520, 250);
+        jPanel2.setBounds(60, 110, 520, 250);
 
         jLtitle2.setFont(openSansFont); // Set custom font
         jLtitle2.setHorizontalAlignment(SwingConstants.CENTER);
@@ -128,9 +129,6 @@ public class Riwayat extends JFrame {
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{
                     {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null}
                 },
                 new String[]{
                     "No", "Paket", "Total Harga", "Status", "Tanggal"
@@ -143,9 +141,16 @@ public class Riwayat extends JFrame {
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make the table non-editable
+            }
         });
+
         jTable1.setColumnSelectionAllowed(true);
-        jTable1.setRowHeight(24); // Set the row height to 24 pixels
+        jTable1.setRowHeight(28); // Set the row height to 28 pixels
+        jTable1.setShowGrid(false); // Disable grid lines
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1);
