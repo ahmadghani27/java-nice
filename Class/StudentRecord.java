@@ -1,5 +1,4 @@
 package Class;
-
 public class StudentRecord {
     private String name;
     private String address;
