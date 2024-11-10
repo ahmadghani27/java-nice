@@ -10,7 +10,7 @@ public class StudentRCexample {
         iwanRecord.setMathG(88.0);
         iwanRecord.setEnglishG(95.5);
         iwanRecord.setScienceG(100.0);
-        iwanRecord.setComputerScienceG(90.0); // Menambahkan nilai komputer
+        iwanRecord.setComputerScienceG(90.0); 
         iwanRecord.print(iwanRecord.getName());
         iwanRecord.print(iwanRecord.getAverage(), iwanRecord.getEnglishG(), iwanRecord.getMathG(), iwanRecord.getScienceG());
 
@@ -22,7 +22,7 @@ public class StudentRCexample {
         ediRecord.setMathG(95.0);
         ediRecord.setEnglishG(95.5);
         ediRecord.setScienceG(91.5);
-        ediRecord.setComputerScienceG(88.0); // Menambahkan nilai komputer
+        ediRecord.setComputerScienceG(88.0); 
         ediRecord.print(ediRecord.getName());
         ediRecord.print(ediRecord.getAverage(), ediRecord.getEnglishG(), ediRecord.getMathG(), ediRecord.getScienceG());
     }

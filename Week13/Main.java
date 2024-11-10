@@ -49,8 +49,8 @@ class Square extends Shape {
 
 public class Main {
     public static void main(String[] args) {
-        Shape circle = new Circle(5);
-        Shape square = new Square(4);
+        Shape circle = new Circle(28);
+        Shape square = new Square(20);
 
         System.out.println("Shape: " + circle.getName() + ", Area: " + circle.getArea());
         System.out.println("Shape: " + square.getName() + ", Area: " + square.getArea());

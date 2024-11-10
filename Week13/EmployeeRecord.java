@@ -1,15 +1,15 @@
+package Week13;
+
 public class EmployeeRecord extends SuperSubClass {
     protected int usia;
     protected String posisi;
 
-    // Constructor
     public EmployeeRecord(String nama, String alamat, int usia, String posisi) {
-        super(nama, alamat); // Memanggil konstruktor superclass
+        super(nama, alamat); 
         this.usia = usia;
         this.posisi = posisi;
     }
 
-    // Method to display employee information
     public void displayInfo() {
         System.out.println("Nama: " + nama);
         System.out.println("Alamat: " + alamat);
