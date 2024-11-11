@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -22,7 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 public class Pembayaran extends JFrame {
-    
+
     private Font openSansFont;
 
     public Pembayaran() {
@@ -32,10 +33,13 @@ public class Pembayaran extends JFrame {
 
     private void loadCustomFont() {
         try {
-            openSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\Github\\java-nice\\Projectakhir\\src\\main\\java\\org\\yourcompany\\project\\OpenSans-Regular.ttf"));
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(openSansFont);
-        } catch (FontFormatException | IOException e) {
+            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("OpenSans-Regular.ttf");
+            if (fontStream != null) {
+                openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(18f);
+            } else {
+                System.err.println("Font file not found!");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -76,7 +80,7 @@ public class Pembayaran extends JFrame {
         MAINPANEL.add(subPanel2);
 
         subPanel0.setBounds(20, 120, 579, 460);
-        subPanel0.setBackground(new Color(240,240,255));
+        subPanel0.setBackground(new Color(240, 240, 255));
         MAINPANEL.add(subPanel0);
         subPanel0.setLayout(null);
 
@@ -106,7 +110,6 @@ public class Pembayaran extends JFrame {
         JButton jBbayar = new JButton("Bayar");
         ButtonGroup buttonGroup = new ButtonGroup();
 
-
         subPanel1.setPreferredSize(new Dimension(510, 180));
         subPanel1.setLayout(null);
         buttonGroup.add(jToggleButton4);
@@ -119,24 +122,23 @@ public class Pembayaran extends JFrame {
         buttonGroup.add(jToggleButton10);
         buttonGroup.add(jToggleButton11);
 
-        subPanel1.add(jToggleButton4).setBounds(0, 0, 170, 60);
-        subPanel1.add(jToggleButton5).setBounds(170, 0, 170, 60);
-        subPanel1.add(jToggleButton3).setBounds(340, 0, 170, 60);
-        subPanel1.add(jToggleButton7).setBounds(0, 60, 170, 60);
-        subPanel1.add(jToggleButton8).setBounds(170, 60, 170, 60);
-        subPanel1.add(jToggleButton6).setBounds(340, 60, 170, 60);
-        subPanel1.add(jToggleButton9).setBounds(0, 120, 170, 60);
-        subPanel1.add(jToggleButton10).setBounds(170, 120, 170, 60);
-        subPanel1.add(jToggleButton11).setBounds(340, 120, 170, 60);
-        subPanel0.add(subPanel1).setBounds(60, 110, 510, 190);
-        subPanel0.add(jLPaket).setBounds(60, 70, 510, 40);
+        subPanel1.add(jToggleButton4).setBounds(0, 0, 175, 60);
+        subPanel1.add(jToggleButton5).setBounds(175, 0, 175, 60);
+        subPanel1.add(jToggleButton3).setBounds(340, 0, 175, 60);
+        subPanel1.add(jToggleButton7).setBounds(0, 60, 175, 60);
+        subPanel1.add(jToggleButton8).setBounds(175, 60, 175, 60);
+        subPanel1.add(jToggleButton6).setBounds(340, 60, 175, 60);
+        subPanel1.add(jToggleButton9).setBounds(0, 120, 175, 60);
+        subPanel1.add(jToggleButton10).setBounds(175, 120, 175, 60);
+        subPanel1.add(jToggleButton11).setBounds(340, 120, 175, 60);
+        subPanel0.add(subPanel1).setBounds(32, 70, 525, 190);
+        subPanel0.add(jLPaket).setBounds(24, 24, 525, 40);
 
         JRadioButton cekPromo = new JRadioButton();
         subPanel0.add(cekPromo).setBounds(550, 380, 20, 50);
 
-        jCBmetode.setBackground(Color.WHITE); // Set the background color to white
-        jCBmetode.setFont(openSansFont.deriveFont(16f)); // Set the font
-        // Create a custom renderer for the JComboBox
+        jCBmetode.setBackground(Color.WHITE);
+        jCBmetode.setFont(openSansFont.deriveFont(16f));
         jCBmetode.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -164,18 +166,17 @@ public class Pembayaran extends JFrame {
         MAINPANEL.add(jLTotalharga).setBounds(60, 440, 190, 50);
         MAINPANEL.add(jBbayar).setBounds(350, 580, 220, 60);
 
-        // Set custom fonts for components
-        jTtitle.setFont(openSansFont.deriveFont(28f)); // Title font size
-        jLPaket.setFont(openSansFont.deriveFont(20f)); // Subtitle font size
-        jLMetode.setFont(openSansFont.deriveFont(16f)); // Method of payment font size
-        jLKodePromo.setFont(openSansFont.deriveFont(16f)); // Promo code font size
-        jLPromo.setFont(openSansFont.deriveFont(16f)); // Promo font size
-        jLTotalharga.setFont(openSansFont.deriveFont(16f)); // Total payment font size
-        jLPaketdibeli.setFont(openSansFont.deriveFont(16f)); // Package price font size
-        jLHargapaket.setFont(openSansFont.deriveFont(16f)); // Package price font size
-        jLPromodipakai.setFont(openSansFont.deriveFont(16f)); // Package price font size
-        JTinputPromo.setFont(openSansFont.deriveFont(24f)); // Package price font size
-        TotalHarga.setFont(openSansFont.deriveFont(24f)); // Package price font size
+        jTtitle.setFont(openSansFont.deriveFont(28f));
+        jLPaket.setFont(openSansFont.deriveFont(20f));
+        jLMetode.setFont(openSansFont.deriveFont(16f));
+        jLKodePromo.setFont(openSansFont.deriveFont(16f));
+        jLPromo.setFont(openSansFont.deriveFont(16f));
+        jLTotalharga.setFont(openSansFont.deriveFont(16f));
+        jLPaketdibeli.setFont(openSansFont.deriveFont(16f));
+        jLHargapaket.setFont(openSansFont.deriveFont(16f));
+        jLPromodipakai.setFont(openSansFont.deriveFont(16f));
+        JTinputPromo.setFont(openSansFont.deriveFont(24f));
+        TotalHarga.setFont(openSansFont.deriveFont(24f));
         jToggleButton4.setFont(openSansFont.deriveFont(22f));
         jToggleButton5.setFont(openSansFont.deriveFont(22f));
         jToggleButton3.setFont(openSansFont.deriveFont(22f));
@@ -203,19 +204,9 @@ public class Pembayaran extends JFrame {
         TotalHarga.setCaretColor(new Color(0, 153, 0));
         TotalHarga.setEditable(false);
         TotalHarga.setBackground(Color.WHITE);
-
-        jBbayar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBbayarActionPerformed(evt);
-            }
-        });
         jBbayar.addActionListener(evt -> toStatus(evt));
 
         pack();
-    }
-
-    private void jBbayarActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here
     }
 
     private void toStatus(ActionEvent evt) {

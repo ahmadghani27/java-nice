@@ -1,13 +1,11 @@
 package org.yourcompany.project;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,7 +20,7 @@ public class StatusTransaksi extends JFrame {
     private JLabel jLtitle10, jLtitle11, jLtitle12, jLtitle3, jLtitle6, jLtitle7, jLtitle8, jLtitle9;
     private JTextField jTextField1;
     private Font openSansFont;
-    private JButton jBBack; // Declare the back button
+    private JButton jBBack;
 
     public StatusTransaksi() {
         loadCustomFont();  // Load the custom font
@@ -31,10 +29,13 @@ public class StatusTransaksi extends JFrame {
 
     private void loadCustomFont() {
         try {
-            openSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\Github\\java-nice\\Projectakhir\\src\\main\\java\\org\\yourcompany\\project\\OpenSans-Regular.ttf")).deriveFont(24f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(openSansFont);
-        } catch (FontFormatException | IOException e) {
+            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("OpenSans-Regular.ttf");
+            if (fontStream != null) {
+                openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(18f);
+            } else {
+                System.err.println("Font file not found!");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -56,6 +57,14 @@ public class StatusTransaksi extends JFrame {
         setPreferredSize(new java.awt.Dimension(640, 720));
         setResizable(false);
         getContentPane().setLayout(null);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width / 2;
+        int screenHeight = screenSize.height / 2;
+        int x = (screenWidth - 640 / 2);
+        int y = (screenHeight - 780 / 2);
+        setLocation(x, y);
+
 
         jPanel2.setLayout(null);
         jLtitle7.setBounds(60, 440, 190, 50);
@@ -119,10 +128,9 @@ public class StatusTransaksi extends JFrame {
     }
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // Navigate back to the main menu or previous screen
-        MenuUtama menuUtama = new MenuUtama();
-        menuUtama.setVisible(true);
-        this.dispose(); // Close the current window
+        InputID InputID = new InputID();
+        InputID.setVisible(true);
+        this.dispose(); 
     }
 
     public static void main(String args[]) {

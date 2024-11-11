@@ -1,40 +1,44 @@
 package org.yourcompany.project;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.awt.*;
+import java.io.InputStream;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 
 public class Riwayat extends JFrame {
 
     private Font openSans;
 
+    private static final String URL = "jdbc:mysql://localhost:3306/DataBaseIanKonter";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
+
     public Riwayat() {
         loadCustomFont();
         initComponents();
+        loadRiwayatTransaksi();
     }
 
     private void loadCustomFont() {
         try {
-            openSans = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\Github\\java-nice\\Projectakhir\\src\\main\\java\\org\\yourcompany\\project\\OpenSans-Regular.ttf")).deriveFont(24f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(openSans);
-        } catch (FontFormatException | IOException e) {
+            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("OpenSans-Regular.ttf");
+            if (fontStream != null) {
+                openSans = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(18f);
+            } else {
+                System.err.println("Font file not found!");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private JTable jTable1 = new JTable();
 
     private void initComponents() {
         JPanel subPanel1 = new JPanel();
@@ -42,7 +46,6 @@ public class Riwayat extends JFrame {
         JButton jBKeluar = new JButton();
         JLabel jLIDPLN2 = new JLabel();
         JScrollPane jScrollPane1 = new JScrollPane();
-        JTable jTable1 = new JTable();
         JLabel jLtitle = new JLabel();
         JLabel jLStore = new JLabel("iAN Konter" + " > " + "Listrik" + " > " + "Menu Utama" + " > " + "Riwayat Transaksi");
 
@@ -68,7 +71,7 @@ public class Riwayat extends JFrame {
         MAINPANEL.add(subPanel1);
         subPanel1.setLayout(null);
 
-        jBKeluar.setBackground(new Color(255, 0, 0));// Use Open Sans font
+        jBKeluar.setBackground(new Color(255, 0, 0));
         jBKeluar.setForeground(Color.WHITE);
         jBKeluar.setText("Keluar");
         jBKeluar.setBorder(null);
@@ -104,12 +107,12 @@ public class Riwayat extends JFrame {
             }
         });
 
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(34);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(40);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(175);
         jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
         jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
         jTable1.getColumnModel().getColumn(4).setPreferredWidth(120);
-        jTable1.getColumnModel().getColumn(5).setPreferredWidth(200);
+        jTable1.getColumnModel().getColumn(5).setPreferredWidth(192);
 
         jTable1.setColumnSelectionAllowed(true);
         jTable1.setRowHeight(25);
@@ -126,11 +129,39 @@ public class Riwayat extends JFrame {
         jLtitle.setBounds(80, 40, 784, 60);
 
         jLStore.setFont(openSans.deriveFont(16f));
-        jLStore.setForeground(new Color(4,4,144));
+        jLStore.setForeground(new Color(4, 4, 144));
         jLStore.setBounds(16, 10, 909, 20);
         MAINPANEL.add(jLStore);
 
         pack();
+    }
+
+    private void loadRiwayatTransaksi() {
+        String query = "SELECT IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL FROM RiwayatTransaksi";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0); // Clear existing rows
+
+            int no = 1; // Row number for display
+            while (rs.next()) {
+                // Retrieve data from the ResultSet
+                String idPelanggan = rs.getString("IDPELANGGAN");
+                String paket = rs.getString("PAKET");
+                String promo = rs.getString("PROMO");
+                String totalHarga = rs.getString("TOTALHARGA");
+                String status = rs.getString("STATUS");
+                String tanggal = rs.getString("TANGGAL");
+
+                // Add a new row to the table model
+                model.addRow(new Object[]{no++, idPelanggan, paket, promo, totalHarga, status, tanggal});
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error loading transaction history: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void ActionMenu(ActionEvent evt) {

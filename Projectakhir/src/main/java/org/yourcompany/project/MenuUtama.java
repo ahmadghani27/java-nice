@@ -16,7 +16,7 @@ public class MenuUtama extends JFrame {
     private JLabel jLIDPLN2;
     private JLabel jLNamaPengguna;
     private JLabel jLtitle, jLStore;
-    private JPanel subPanel1, MAINPANEL;  
+    private JPanel subPanel1, MAINPANEL;
     private Font openSans;
 
     private static final String URL = "jdbc:mysql://localhost:3306/DataBaseIanKonter";
@@ -24,7 +24,7 @@ public class MenuUtama extends JFrame {
     private static final String PASSWORD = "";
 
     public MenuUtama() {
-        loadCustomFont(); 
+        loadCustomFont();
         initComponents();
         setResizable(false);
         Connector();
@@ -32,24 +32,40 @@ public class MenuUtama extends JFrame {
 
     private void loadCustomFont() {
         try {
-            openSans = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\Github\\java-nice\\Projectakhir\\src\\main\\java\\org\\yourcompany\\project\\OpenSans-Regular.ttf")).deriveFont(24f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(openSans);
-        } catch (FontFormatException | IOException e) {
+            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("OpenSans-Regular.ttf");
+            if (fontStream != null) {
+                openSans = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(18f);
+            } else {
+                System.err.println("Font file not found!");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void initComponents() {
+
         MAINPANEL = new JPanel();
         subPanel1 = new JPanel();
         jBKeluar = new JButton();
-        jLNamaPengguna = new JLabel();
-        jLIDPLN2 = new JLabel();
         jBBeli = new JButton();
         jBriwayat = new JButton();
         jLtitle = new JLabel();
-        jLStore = new JLabel("iAN Konter" + " > " + "Listrik"+ " > " + "Menu Utama");
+        jLStore = new JLabel("iAN Konter" + " > " + "Listrik" + " > " + "Menu Utama");
+
+        jBBeli.setBackground(Color.ORANGE);
+        jBBeli.setFont(openSans.deriveFont(Font.BOLD, 32f));
+        jBBeli.setForeground(Color.WHITE);
+        jBBeli.setText("Beli Token Listrik");
+        jBBeli.setBorder(null);
+        jBBeli.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jBBeliActionPerformed(evt);
+            }
+        });
+        jBBeli.addActionListener(evt -> toPembelian(evt));
+        subPanel1.add(jBBeli);
+        jBBeli.setBounds(24, 36, 531, 190);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBackground(Color.WHITE);
@@ -67,13 +83,13 @@ public class MenuUtama extends JFrame {
         setLocation(x, y);
 
         jLStore.setFont(openSans.deriveFont(16f));
-        jLStore.setForeground(new Color(4,4,144));
+        jLStore.setForeground(new Color(4, 4, 144));
         jLStore.setBounds(16, 10, 589, 20);
         MAINPANEL.add(jLStore);
 
         MAINPANEL.setLayout(null);
         MAINPANEL.setBounds(0, 0, 624, 681);
-        MAINPANEL.setBackground(new Color(250,255,250));
+        MAINPANEL.setBackground(new Color(250, 255, 250));
         getContentPane().add(MAINPANEL);
         Border Border = BorderFactory.createLineBorder(new Color(46, 255, 44), 4);
         MAINPANEL.setBorder(Border);
@@ -84,7 +100,7 @@ public class MenuUtama extends JFrame {
         getContentPane().setLayout(null);
 
         subPanel1.setBounds(20, 120, 579, 460);
-        subPanel1.setBackground(new Color(240,240,255));
+        subPanel1.setBackground(new Color(240, 240, 255));
         MAINPANEL.add(subPanel1);
         subPanel1.setLayout(null);
 
@@ -99,33 +115,7 @@ public class MenuUtama extends JFrame {
         });
         MAINPANEL.add(jBKeluar);
         jBKeluar.setBounds(390, 600, 210, 60);
-        jBKeluar.setFont(openSans); 
-
-        jLNamaPengguna.setFont(openSans.deriveFont(24f)); // Use Open Sans font
-        jLNamaPengguna.setHorizontalAlignment(SwingConstants.LEFT);
-        jLNamaPengguna.setText("Nama Pengguna :");
-        subPanel1.add(jLNamaPengguna);
-        jLNamaPengguna.setBounds(24, 50, 600, 36);
-
-        jLIDPLN2.setFont(openSans.deriveFont(24f)); // Use Open Sans font
-        jLIDPLN2.setHorizontalAlignment(SwingConstants.LEFT);
-        jLIDPLN2.setText("ID PLN                   : ");
-        subPanel1.add(jLIDPLN2);
-        jLIDPLN2.setBounds(24, 10, 600, 36);
-
-        jBBeli.setBackground(Color.ORANGE);
-        jBBeli.setFont(openSans.deriveFont(Font.BOLD, 32f));
-        jBBeli.setForeground(Color.WHITE);
-        jBBeli.setText("Beli Token Listrik");
-        jBBeli.setBorder(null);
-        jBBeli.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jBBeliActionPerformed(evt);
-            }
-        });
-        jBBeli.addActionListener(evt -> toPembelian(evt));
-        subPanel1.add(jBBeli);
-        jBBeli.setBounds(24, 120, 531, 140);
+        jBKeluar.setFont(openSans);
 
         jBriwayat.setBackground(new Color(13, 207, 0));
         jBriwayat.setFont(openSans.deriveFont(Font.BOLD, 32f));
@@ -139,9 +129,9 @@ public class MenuUtama extends JFrame {
         });
         jBriwayat.addActionListener(evt -> toRiwayat(evt));
         subPanel1.add(jBriwayat);
-        jBriwayat.setBounds(24, 290, 531, 140);
+        jBriwayat.setBounds(24, 240, 531, 190);
 
-        jLtitle.setFont(openSans.deriveFont(40f)); 
+        jLtitle.setFont(openSans.deriveFont(40f));
         jLtitle.setHorizontalAlignment(SwingConstants.CENTER);
         jLtitle.setText("Menu Utama");
         MAINPANEL.add(jLtitle);

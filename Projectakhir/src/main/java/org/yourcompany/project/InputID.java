@@ -4,14 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -119,11 +116,20 @@ public class InputID extends JFrame {
         pack();
     }
 
+    public String idMeteran(){
+        String IDMeteran = jTFinputID.getText();
+        return IDMeteran;
+    }
+
     private void loadCustomFont() {
         try {
-            openSans = Font.createFont(Font.TRUETYPE_FONT, new File("D:\\Github\\java-nice\\Projectakhir\\src\\main\\java\\org\\yourcompany\\project\\OpenSans-Regular.ttf")).deriveFont(18f);
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(openSans);
-        } catch (FontFormatException | IOException e) {
+            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("OpenSans-Regular.ttf");
+            if (fontStream != null) {
+                openSans = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(18f);
+            } else {
+                System.err.println("Font file not found!");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -142,19 +148,28 @@ public class InputID extends JFrame {
     }
 
     private void ActionMenu() {
-        String inputID = jTFinputID.getText();
+        String InputID = jTFinputID.getText();
+        String NamaPelanggan = jTFinputUsr.getText();
 
-        if (inputID.length() == 11) {
-            String checkQuery = "SELECT COUNT(*) FROM id_pelanggan WHERE ID_Pelanggan = ?";
-            String insertQuery = "INSERT INTO id_pelanggan (ID_Pelanggan) VALUES (?)";
+        if (InputID.length() == 11) {
+            long inputID;
+            try {
+                inputID = Long.parseLong(InputID);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Masukkan ID Meteran yang benar", "Harus angka 11 digit", JOptionPane.ERROR_MESSAGE);
+                return; 
+            }
+            String checkQuery = "SELECT COUNT(*) FROM IDPelanggan WHERE IDMeteran = ?";
+            String insertQuery = "INSERT INTO IDPelanggan (IDMeteran, NamaPelanggan) VALUES (?, ?)";
 
             try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD); PreparedStatement checkStmt = connection.prepareStatement(checkQuery); PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
 
-                checkStmt.setString(1, inputID);
+                checkStmt.setLong(1, inputID);
                 ResultSet resultSet = checkStmt.executeQuery();
 
                 if (resultSet.next() && resultSet.getInt(1) == 0) {
-                    insertStmt.setString(1, inputID);
+                    insertStmt.setLong(1, inputID);
+                    insertStmt.setString(2, NamaPelanggan);
                     insertStmt.executeUpdate();
                     System.out.println("IDPelanggan " + inputID + " berhasil ditambahkan.");
                 } else {
