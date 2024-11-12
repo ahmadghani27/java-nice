@@ -153,44 +153,62 @@ public class InputID extends JFrame {
         });
     }
 
-    private void ActionMenu() {
-        String InputID = jTFinputID.getText();
-        String NamaPelanggan = jTFinputUsr.getText();
+  private void ActionMenu() {
+    String InputID = jTFinputID.getText();
+    String NamaPelanggan = jTFinputUsr.getText();
 
-        if (InputID.length() == 11) {
-            long inputID;
-            try {
-                inputID = Long.parseLong(InputID);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Masukkan ID Meteran yang benar", "Harus angka 11 digit", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String checkQuery = "SELECT COUNT(*) FROM IDPelanggan WHERE IDMeteran = ?";
-            String insertQuery = "INSERT INTO IDPelanggan (IDMeteran, NamaPelanggan) VALUES (?, ?)";
-
-            try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD); PreparedStatement checkStmt = connection.prepareStatement(checkQuery); PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
-
-                checkStmt.setLong(1, inputID);
-                ResultSet resultSet = checkStmt.executeQuery();
-
-                if (resultSet.next() && resultSet.getInt(1) == 0) {
-                    insertStmt.setLong(1, inputID);
-                    insertStmt.setString(2, NamaPelanggan);
-                    insertStmt.executeUpdate();
-                    System.out.println("IDPelanggan " + inputID + " berhasil ditambahkan.");
-                } else {
-                    System.out.println("IDPelanggan " + inputID + " sudah ada di database.");
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            new MenuUtama().setVisible(true);
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Masukkan ID Meteran yang benar", "Harus 11 digit", JOptionPane.ERROR_MESSAGE);
+    if (InputID.length() == 11) {
+        long inputID;
+        try {
+            inputID = Long.parseLong(InputID);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Masukkan ID Meteran yang benar", "Harus angka 11 digit", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        
+        String checkQuery = "SELECT COUNT(*) FROM IDPelanggan WHERE IDMeteran = ?";
+        String insertQuery = "INSERT INTO IDPelanggan (IDMeteran, NamaPelanggan, priority) VALUES (?, ?, ?)";
+        String updatePriorityQuery = "UPDATE IDPelanggan SET priority = 0"; // Set semua priority ke 0
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD); 
+             PreparedStatement checkStmt = connection.prepareStatement(checkQuery); 
+             PreparedStatement insertStmt = connection.prepareStatement(insertQuery);
+             PreparedStatement updateStmt = connection.prepareStatement(updatePriorityQuery)) {
+
+            // Cek apakah ID sudah ada
+            checkStmt.setLong(1, inputID);
+            ResultSet resultSet = checkStmt.executeQuery();
+
+            if (resultSet.next() && resultSet.getInt(1) == 0) {
+                // Update semua ID menjadi priority 0
+                updateStmt.executeUpdate();
+
+                // Tambah ID baru dengan priority 1
+                insertStmt.setLong(1, inputID);
+                insertStmt.setString(2, NamaPelanggan);
+                insertStmt.setInt(3, 1); // Set priority menjadi 1
+                insertStmt.executeUpdate();
+                System.out.println("IDPelanggan " + inputID + " berhasil ditambahkan.");
+            } else {
+                // Jika ID sudah ada, Anda dapat memperbarui nama pelanggan dan mengatur priority
+                String updateQuery = "UPDATE IDPelanggan SET NamaPelanggan = ?, priority = 1 WHERE IDMeteran = ?";
+                try (PreparedStatement updateStmtDuplicate = connection.prepareStatement(updateQuery)) {
+                    updateStmtDuplicate.setString(1, NamaPelanggan);
+                    updateStmtDuplicate.setLong(2, inputID);
+                    updateStmtDuplicate.executeUpdate();
+                    System.out.println("IDPelanggan " + inputID + " sudah ada, nama pelanggan diperbarui dan priority diatur menjadi 1.");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        new MenuUtama().setVisible(true);
+        dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Masukkan ID Meteran yang benar", "Harus 11 digit", JOptionPane.ERROR_MESSAGE);
     }
+}
 
 
     public long AmbilIDMeteran() {

@@ -206,11 +206,10 @@ public class Pembayaran extends JFrame {
                 }
 
                 // Assuming you have a way to get the ID without creating a new instance
-                String meterID = String.valueOf(idPelanggan); // Ensure this is the correct type
 
                 int totalPrice = updateTotalPrice(); // Ensure this method accounts for discounts
                 TotalHarga.setText("Rp " + String.format("%,d", totalPrice));
-                saveTransaction(meterID, selectedPackage, promoCode, totalPrice); // Pass the meterID
+                saveTransaction(selectedPackage, promoCode, totalPrice); // Pass the meterID
 
                 JOptionPane.showMessageDialog(subPanel0,
                         "<html><body style='width: 300px;'>"
@@ -307,32 +306,44 @@ public class Pembayaran extends JFrame {
         }
     }
 
-    private void saveTransaction(String idPelanggan, String paket, String promo, int totalHarga) {
-        String query = "INSERT INTO RiwayatTransaksi (IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL) VALUES (?, ?, ?, ?, ?, NOW())";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+    private String IDMetaranPrioritas; // Variabel untuk menyimpan ID meteran prioritas
 
-               String OO = "11111111111";
+    private void saveTransaction(String paket, String promo, int totalHarga) {
+        String querySelect = "SELECT IDMeteran FROM IDPelanggan WHERE priority = 1 LIMIT 1"; // Ambil ID meteran dengan priority 1
+        String queryInsert = "INSERT INTO RiwayatTransaksi (IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL) VALUES (?, ?, ?, ?, ?, NOW())";
+        
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement selectStmt = conn.prepareStatement(querySelect);
+             ResultSet rs = selectStmt.executeQuery()) {
     
-            stmt.setString(1, OO); // ID Pelanggan
-            stmt.setString(2, paket); // Paket yang dibeli
-            stmt.setString(3, promo); // Kode promo
-            stmt.setInt(4, totalHarga); // Total harga
-            stmt.setString(5, "Sukses"); // Status transaksi
+            if (rs.next()) {
+                String IDMetaranPrioritas = rs.getString("IDMeteran"); // Simpan ID meteran ke variabel
+                System.out.println("ID Meteran Prioritas: " + IDMetaranPrioritas);
+                
+                // Simpan transaksi
+                try (PreparedStatement insertStmt = conn.prepareStatement(queryInsert)) {
+                    insertStmt.setString(1, IDMetaranPrioritas); 
+                    insertStmt.setString(2, paket); 
+                    insertStmt.setString(3, promo); 
+                    insertStmt.setInt(4, totalHarga); 
+                    insertStmt.setString(5, "Sukses"); 
     
-            stmt.executeUpdate();
-            System.out.println("Transaksi berhasil disimpan.");
+                    insertStmt.executeUpdate();
+                    System.out.println("Transaksi berhasil disimpan.");
+                }
+            } else {
+                System.out.println("Tidak ada ID Meteran dengan prioritas 1.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
+    
     private void toStatus(ActionEvent evt) {
         StatusTransaksi status = new StatusTransaksi();
         status.setVisible(true);
         this.dispose();
     }
-
     private void ActionMenu(ActionEvent evt) {
         MenuUtama menuUtama = new MenuUtama();
         menuUtama.setVisible(true);

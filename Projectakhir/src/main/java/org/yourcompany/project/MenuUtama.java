@@ -28,6 +28,8 @@ public class MenuUtama extends JFrame {
         initComponents();
         setResizable(false);
         Connector();
+
+        
     }
 
     private void loadCustomFont() {

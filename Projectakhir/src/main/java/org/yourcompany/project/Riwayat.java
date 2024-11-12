@@ -1,18 +1,35 @@
 package org.yourcompany.project;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.InputStream;
-import javax.swing.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import java.sql.*;
 
 public class Riwayat extends JFrame {
 
     private Font openSans;
-    private String idPelanggan; // Declare the variable to hold the ID
-
+    private String idPelanggan;
+    private long IDmeteraN;
     private static final String URL = "jdbc:mysql://localhost:3306/DataBaseIanKonter";
     private static final String USER = "root";
     private static final String PASSWORD = "";
@@ -20,7 +37,7 @@ public class Riwayat extends JFrame {
     public Riwayat() {
         loadCustomFont();
         initComponents();
-        getIdPelanggan(); // Call to get the ID from InputID
+        getIDPelanggan(); // Call to get the ID with priority 1
     }
 
     private void loadCustomFont() {
@@ -75,7 +92,7 @@ public class Riwayat extends JFrame {
         jBKeluar.setBorder(null);
         MAINPANEL.add(jBKeluar);
         jBKeluar.setBounds(710, 600, 210, 60);
-        jBKeluar.addActionListener(evt -> ActionMenu(evt));
+        jBKeluar.addActionListener(evt -> actionMenu(evt));
         jBKeluar.setFont(openSans);
 
         jLIDPLN2.setFont(openSans);
@@ -84,15 +101,14 @@ public class Riwayat extends JFrame {
         subPanel1.add(jLIDPLN2);
         jLIDPLN2.setBounds(20, 10, 480, 60);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                    {null, null, null, null, null},},
+        jTable1.setModel(new DefaultTableModel(
+                new Object[][]{},
                 new String[]{
-                    "No", "Paket", "Promo", "Total Harga", "Status", "Tanggal"
+                    "No", "ID Pelanggan", "Paket", "Promo", "Total Harga", "Status", "Tanggal"
                 }
         ) {
             Class[] types = new Class[]{
-                Integer.class, String.class, String.class, String.class, String.class, String.class
+                Integer.class, String.class, String.class, String.class, String.class, String.class, String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -111,7 +127,7 @@ public class Riwayat extends JFrame {
         jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
         jTable1.getColumnModel().getColumn(4).setPreferredWidth(120);
         jTable1.getColumnModel().getColumn(5).setPreferredWidth(192);
-
+        jTable1.getColumnModel().getColumn(6).setPreferredWidth(192);
         jTable1.setColumnSelectionAllowed(true);
         jTable1.setRowHeight(25);
         jTable1.setShowGrid(false);
@@ -134,25 +150,33 @@ public class Riwayat extends JFrame {
         pack();
     }
 
-    private void getIdPelanggan() {
-        InputID inputIDFrame = new InputID();
-        inputIDFrame.setVisible(true); 
-        inputIDFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                Long AB = inputIDFrame.AmbilIDMeteran(); // Get the ID from InputID
-                idPelanggan = AB.toString();
-                System.out.println("ID Pelanggan: " + idPelanggan);
+    private void getIDPelanggan() {
+        getIDMeteranPrioritas(); // Ambil ID Meteran dengan Prioritas 1
+    }
+
+    private void getIDMeteranPrioritas() {
+        String query = "SELECT IDMeteran FROM IDPelanggan WHERE priority = 1 LIMIT 1"; // Ambil ID meteran dengan priority 1
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                IDmeteraN = rs.getLong("IDMeteran"); // Simpan ID meteran ke variabel
+                System.out.println("ID Meteran Prioritas: " + IDmeteraN);
+                idPelanggan = String.valueOf(IDmeteraN); // Set idPelanggan dengan ID Meteran
                 loadRiwayatTransaksi(); // Load transaction history after getting the ID
+            } else {
+                System.out.println("Tidak ada ID Meteran dengan prioritas 1.");
+                JOptionPane.showMessageDialog(this, "Tidak ada ID Meteran dengan prioritas 1.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        });
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error retrieving meter ID: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void loadRiwayatTransaksi() {
-        String query = "SELECT NO, IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL FROM RiwayatTransaksi WHERE IDPELANGGAN = ?";
+        String query = "SELECT IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL FROM RiwayatTransaksi WHERE IDPELANGGAN = ?";
 
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, idPelanggan); // Set the ID parameter
             ResultSet rs = stmt.executeQuery();
 
@@ -178,18 +202,13 @@ public class Riwayat extends JFrame {
         }
     }
 
-    private void ActionMenu(ActionEvent evt) {
+    private void actionMenu(ActionEvent evt) {
         MenuUtama menuUtama = new MenuUtama();
         menuUtama.setVisible(true);
         this.dispose();
     }
 
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Riwayat().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new Riwayat().setVisible(true));
     }
 }
