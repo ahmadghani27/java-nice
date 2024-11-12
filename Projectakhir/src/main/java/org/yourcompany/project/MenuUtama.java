@@ -145,13 +145,20 @@ public class MenuUtama extends JFrame {
     private void jBKeluarActionPerformed(ActionEvent evt) {
         MySQLConnector connector = new MySQLConnector();
         Connection connection = null;
-
+    
         try {
             connection = connector.connect();
+            String updatePriorityQuery = "UPDATE IDPelanggan SET priority = 0";
+            try (Statement statement = connection.createStatement()) {
+                int rowsAffected = statement.executeUpdate(updatePriorityQuery);
+                System.out.println(rowsAffected + " rows updated.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             connector.closeConnection(connection);
         }
-
+    
         System.exit(0);
     }
 

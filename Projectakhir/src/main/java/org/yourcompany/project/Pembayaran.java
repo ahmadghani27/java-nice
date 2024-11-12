@@ -212,7 +212,7 @@ public class Pembayaran extends JFrame {
                 saveTransaction(selectedPackage, promoCode, totalPrice); // Pass the meterID
 
                 JOptionPane.showMessageDialog(subPanel0,
-                        "<html><body style='width: 300px;'>"
+                        "<html><body style='width: 300px;'>" +  "<h1 style='text-align: center;'>SUKSES</h1>"
                                 + "<h2>Detail Pembayaran</h2>"
                                 + "<p><strong>Paket:</strong> " + selectedPackage + "</p>"
                                 + "<p><strong>Metode Pembayaran:</strong> " + paymentMethod + "</p>"
@@ -340,8 +340,8 @@ public class Pembayaran extends JFrame {
     }
     
     private void toStatus(ActionEvent evt) {
-        StatusTransaksi status = new StatusTransaksi();
-        status.setVisible(true);
+        MenuUtama menuUtama = new MenuUtama();
+        menuUtama.setVisible(true);
         this.dispose();
     }
     private void ActionMenu(ActionEvent evt) {
