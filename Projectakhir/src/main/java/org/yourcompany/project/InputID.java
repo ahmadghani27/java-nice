@@ -36,10 +36,21 @@ public class InputID extends JFrame {
     private static final String URL = "jdbc:mysql://localhost:3306/DataBaseIanKonter";
     private static final String USER = "root";
     private static final String PASSWORD = "";
+    private Connection connection;
 
     public InputID() {
         initComponents();
         setupActions();
+
+        MySQLConnector CheckandCreate = new MySQLConnector();
+        connection = CheckandCreate.connect();
+
+        if (connection != null) {
+            CheckandCreate.checkAndCreateDatabaseAndTables(connection);
+        } else {
+            JOptionPane.showMessageDialog(this, "Database connection failed. The application will continue without database access.",
+                    "Connection Error", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     private void initComponents() {
@@ -67,7 +78,7 @@ public class InputID extends JFrame {
 
         MAINPANEL.setLayout(null);
         MAINPANEL.setBounds(0, 0, 624, 681);
-        MAINPANEL.setBackground(new Color(250,255,250));
+        MAINPANEL.setBackground(new Color(250, 255, 250));
         getContentPane().add(MAINPANEL);
         Border Border = BorderFactory.createLineBorder(new Color(46, 255, 44), 4);
         MAINPANEL.setBorder(Border);
@@ -95,7 +106,7 @@ public class InputID extends JFrame {
         subPanel1.add(jBinputID);
 
         subPanel1.setBounds(20, 150, 579, 340);
-        subPanel1.setBackground(new Color(240,240,255));
+        subPanel1.setBackground(new Color(240, 240, 255));
         MAINPANEL.add(subPanel1);
 
         jLTitle.setFont(openSans.deriveFont(48f));
@@ -107,18 +118,13 @@ public class InputID extends JFrame {
         jLInput.setVisible(false);
         jLInput.setBounds(80, 115, 440, 15);
         subPanel1.add(jLInput);
-        
+
         jLStore.setFont(openSans.deriveFont(16f));
-        jLStore.setForeground(new Color(4,4,144));
+        jLStore.setForeground(new Color(4, 4, 144));
         jLStore.setBounds(16, 10, 589, 20);
         MAINPANEL.add(jLStore);
 
         pack();
-    }
-
-    public String idMeteran(){
-        String IDMeteran = jTFinputID.getText();
-        return IDMeteran;
     }
 
     private void loadCustomFont() {
@@ -157,7 +163,7 @@ public class InputID extends JFrame {
                 inputID = Long.parseLong(InputID);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Masukkan ID Meteran yang benar", "Harus angka 11 digit", JOptionPane.ERROR_MESSAGE);
-                return; 
+                return;
             }
             String checkQuery = "SELECT COUNT(*) FROM IDPelanggan WHERE IDMeteran = ?";
             String insertQuery = "INSERT INTO IDPelanggan (IDMeteran, NamaPelanggan) VALUES (?, ?)";
@@ -186,6 +192,11 @@ public class InputID extends JFrame {
         }
     }
 
+
+    public long AmbilIDMeteran() {
+        return Long.parseLong(jTFinputID.getText());
+    }
+    
     public static void main(String args[]) {
         EventQueue.invokeLater(() -> new InputID().setVisible(true));
     }

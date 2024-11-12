@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
@@ -15,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
@@ -37,21 +37,25 @@ public class Pembayaran extends JFrame {
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
+    private Long idPelanggan;
+
     private Font openSansFont;
     private int HargaPaketAkhir, HargaPaketAwal, BiayaAdmin, TotalHargaDibayar, HargaPromo;
-    JLabel jLPaket = new JLabel("Paket Listrik:");
-    JComboBox<String> jCBmetode = new JComboBox<>(new String[]{"Dana", "Bank BCA", "Bank BRI", "Bank Mandiri", "Shopee Pay"});
-    JLabel jLMetode = new JLabel("Metode Pembayaran ");
-    JTextField JTinputPromo = new JTextField("");
-    JLabel jLPromo = new JLabel("Promo");
-    JLabel jLPaketdibeli = new JLabel("Rp0,00", SwingConstants.RIGHT);
-    JLabel jLHargapaket = new JLabel("Harga Paket");
-    JLabel jLPromodipakai = new JLabel("-Rp0,00", SwingConstants.RIGHT);
-    JLabel jLKodePromo = new JLabel("Kode Promo");
-    JLabel jLTotalharga = new JLabel("Total Pembayaran");
-    JTextField TotalHarga = new JTextField("Rp0,00");
-    JButton jBbayar = new JButton("Bayar");
-    ButtonGroup buttonGroup = new ButtonGroup();
+    private JLabel jLPaket = new JLabel("Paket Listrik:");
+    private JComboBox<String> jCBmetode = new JComboBox<>(new String[]{"Dana", "Bank BCA", "Bank BRI", "Bank Mandiri", "Shopee Pay"});
+    private JLabel jLMetode = new JLabel("Metode Pembayaran ");
+    private JTextField JTinputPromo = new JTextField("");
+    private JLabel jLPromo = new JLabel("Promo");
+    private JLabel jLPaketdibeli = new JLabel("Rp0,00", SwingConstants.RIGHT);
+    private JLabel jLHargapaket = new JLabel("Harga Paket");
+    private JLabel jLPromodipakai = new JLabel("-Rp0,00", SwingConstants.RIGHT);
+    private JLabel jLKodePromo = new JLabel("Kode Promo");
+    private JLabel jLTotalharga = new JLabel("Total Pembayaran");
+    private JTextField TotalHarga = new JTextField("Rp0,00");
+    private JButton jBbayar = new JButton("Bayar");
+    private ButtonGroup buttonGroup = new ButtonGroup();
+
+    private static final int BIAYA_ADMIN = 2000;
 
     public Pembayaran() {
         loadCustomFont();
@@ -64,10 +68,12 @@ public class Pembayaran extends JFrame {
             if (fontStream != null) {
                 openSansFont = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(18f);
             } else {
-                System.err.println("Font file not found!");
+                System.err.println("Font file not found! Using default font.");
+                openSansFont = new Font("Arial", Font.PLAIN, 18);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            openSansFont = new Font("Arial", Font.PLAIN, 18); // Fallback to default font
         }
     }
 
@@ -78,7 +84,7 @@ public class Pembayaran extends JFrame {
         setPreferredSize(new Dimension(640, 720));
         setResizable(false);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize ();
         int screenWidth = screenSize.width / 2;
         int screenHeight = screenSize.height / 2;
         int x = (screenWidth - 640 / 2);
@@ -104,16 +110,27 @@ public class Pembayaran extends JFrame {
         subPanel0.setBackground(new Color(240, 240, 255));
         MAINPANEL.add(subPanel0);
         subPanel0.setLayout(null);
+        
+        subPanel1.setLayout(null);
+        ActionListener toggleListener = e -> {
+            JToggleButton selectedButton = (JToggleButton) e.getSource();
+            String Hargapaket = selectedButton.getText();
+            HargaPaketAwal = Integer.parseInt(Hargapaket);
+            BiayaAdmin = BIAYA_ADMIN + HargaPaketAwal * 1 / 100;
+            HargaPaketAkhir = HargaPaketAwal + BiayaAdmin;
+            jLPaketdibeli.setText("Rp" + HargaPaketAkhir + ",00");
+            TotalHargaDibayar = HargaPaketAkhir - HargaPromo;
+            updateTotalPrice();
+        };
+        JToggleButton[] jToggleButtons = new JToggleButton[Paket.length];
+        for (int i = 0; i < Paket.length; i++) {
+            jToggleButtons[i] = new JToggleButton(Paket[i]);
+            jToggleButtons[i].setBounds((i % 3) * 176, (i / 3) * 43, 173, 40);
+            subPanel1.add(jToggleButtons[i]);
+            buttonGroup.add(jToggleButtons[i]);
+            jToggleButtons[i].addActionListener(toggleListener);
+        }
 
-        JToggleButton jToggleButton3 = new JToggleButton(Paket[0]);
-        JToggleButton jToggleButton4 = new JToggleButton(Paket[1]);
-        JToggleButton jToggleButton5 = new JToggleButton(Paket[2]);
-        JToggleButton jToggleButton6 = new JToggleButton(Paket[3]);
-        JToggleButton jToggleButton7 = new JToggleButton(Paket[4]);
-        JToggleButton jToggleButton8 = new JToggleButton(Paket[5]);
-        JToggleButton jToggleButton9 = new JToggleButton(Paket[6]);
-        JToggleButton jToggleButton10 = new JToggleButton(Paket[7]);
-        JToggleButton jToggleButton11 = new JToggleButton(Paket[8]);
         JLabel jTtitle = new JLabel("Beli Token Listrik", SwingConstants.CENTER);
         jTtitle.setBounds(80, 20, 470, 60);
         MAINPANEL.add(jTtitle);
@@ -127,50 +144,7 @@ public class Pembayaran extends JFrame {
         jBKeluar.addActionListener(evt -> ActionMenu(evt));
         jBKeluar.setFont(openSansFont);
 
-        subPanel1.setLayout(null);
-        buttonGroup.add(jToggleButton4);
-        buttonGroup.add(jToggleButton5);
-        buttonGroup.add(jToggleButton3);
-        buttonGroup.add(jToggleButton7);
-        buttonGroup.add(jToggleButton8);
-        buttonGroup.add(jToggleButton6);
-        buttonGroup.add(jToggleButton9);
-        buttonGroup.add(jToggleButton10);
-        buttonGroup.add(jToggleButton11);
 
-        ActionListener toggleListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JToggleButton selectedButton = (JToggleButton) e.getSource();
-                String Hargapaket = selectedButton.getText();
-                HargaPaketAwal = Integer.parseInt(Hargapaket);
-                BiayaAdmin = 2000 + HargaPaketAwal * 1 / 100;
-                HargaPaketAkhir = HargaPaketAwal + BiayaAdmin;
-                jLPaketdibeli.setText("Rp" + HargaPaketAkhir + ",00");
-                TotalHargaDibayar = HargaPaketAkhir - HargaPromo;
-                updateTotalPrice();
-            }
-        };
-
-        jToggleButton4.addActionListener(toggleListener);
-        jToggleButton5.addActionListener(toggleListener);
-        jToggleButton3.addActionListener(toggleListener);
-        jToggleButton7.addActionListener(toggleListener);
-        jToggleButton8.addActionListener(toggleListener);
-        jToggleButton6.addActionListener(toggleListener);
-        jToggleButton9.addActionListener(toggleListener);
-        jToggleButton10.addActionListener(toggleListener);
-        jToggleButton11.addActionListener(toggleListener);
-
-        subPanel1.add(jToggleButton4).setBounds(0, 0, 173, 40);
-        subPanel1.add(jToggleButton5).setBounds(176, 0, 173, 40);
-        subPanel1.add(jToggleButton3).setBounds(352, 0, 173, 40);
-        subPanel1.add(jToggleButton7).setBounds(0, 43, 173, 40);
-        subPanel1.add(jToggleButton8).setBounds(176, 43, 173, 40);
-        subPanel1.add(jToggleButton6).setBounds(352, 43, 173, 40);
-        subPanel1.add(jToggleButton9).setBounds(0, 86, 173, 40);
-        subPanel1.add(jToggleButton10).setBounds(176, 86, 173, 40);
-        subPanel1.add(jToggleButton11).setBounds(352, 86, 173, 40);
         subPanel0.add(subPanel1).setBounds(32, 60, 525, 126);
         subPanel0.add(jLPaket).setBounds(32, 12, 525, 40);
 
@@ -216,30 +190,41 @@ public class Pembayaran extends JFrame {
                 String paymentMethod = (String) jCBmetode.getSelectedItem();
                 String promoCode = jLPromodipakai.getText();
 
-                String totalAmount = selectedPackage.replace("Rp", "").replace(".", "").replace(",", "").trim();
-                int packagePrice = Integer.parseInt(totalAmount);
+                String formattedPrice = selectedPackage.replace("Rp", "").replace(".", "").replace(",", "").trim();
+                int packagePrice;
 
-                Integer discount = 0;
+                try {
+                    packagePrice = Integer.parseInt(formattedPrice);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(subPanel0, "Harga paket tidak valid.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
+                int discount = 0;
                 if (!promoCode.isEmpty()) {
                     discount = getDiscountAmount(promoCode);
                 }
 
-                int totalPrice = updateTotalPrice();
+                // Assuming you have a way to get the ID without creating a new instance
+                String meterID = String.valueOf(idPelanggan); // Ensure this is the correct type
+
+                int totalPrice = updateTotalPrice(); // Ensure this method accounts for discounts
                 TotalHarga.setText("Rp " + String.format("%,d", totalPrice));
+                saveTransaction(meterID, selectedPackage, promoCode, totalPrice); // Pass the meterID
 
                 JOptionPane.showMessageDialog(subPanel0,
                         "<html><body style='width: 300px;'>"
-                        + "<h2>Detail Pembayaran</h2>"
-                        + "<p><strong>Paket:</strong> " + selectedPackage + "</p>"
-                        + "<p><strong>Metode Pembayaran:</strong> " + paymentMethod + "</p>"
-                        + "<p><strong>Kode Promo:</strong> " + (promoCode.isEmpty() ? "None" : promoCode) + "</p>"
-                        + "<p><strong>Total:</strong> Rp " + String.format("%,d", totalPrice) + "</p>"
-                        + "</body></html>",
+                                + "<h2>Detail Pembayaran</h2>"
+                                + "<p><strong>Paket:</strong> " + selectedPackage + "</p>"
+                                + "<p><strong>Metode Pembayaran:</strong> " + paymentMethod + "</p>"
+                                + "<p><strong>Kode Promo:</strong> " + (promoCode.isEmpty() ? "None" : promoCode) + "</p>"
+                                + "<p><strong>Total:</strong> Rp " + String.format("%,d", totalPrice) + "</p>"
+                                + "</body></html>",
                         "Konfirmasi Pembayaran", JOptionPane.INFORMATION_MESSAGE);
                 toStatus(e);
             }
         });
+
         cekPromo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -251,7 +236,7 @@ public class Pembayaran extends JFrame {
                         jLPromodipakai.setText("-Rp " + String.format("%,d", HargaPromo));
                     } else {
                         jLPromodipakai.setText("-Rp 0");
-                        JOptionPane.showMessageDialog(MAINPANEL, "Promo code is invalid or inactive.", "Invalid Promo Code", JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(MAINPANEL, "Kode promo tidak valid atau tidak aktif.", "Kode Promo Tidak Valid", JOptionPane.WARNING_MESSAGE);
                         cekPromo.setSelected(false);
                     }
                 } else {
@@ -269,7 +254,7 @@ public class Pembayaran extends JFrame {
         jTtitle.setFont(openSansFont.deriveFont(28f));
         jLPaket.setFont(openSansFont.deriveFont(20f));
         jLMetode.setFont(openSansFont.deriveFont(16f));
-        jLKodePromo.setFont(openSansFont.deriveFont(16f));
+        jLKodePromo .setFont(openSansFont.deriveFont(16f));
         jLPromo.setFont(openSansFont.deriveFont(16f));
         jLTotalharga.setFont(openSansFont.deriveFont(16f));
         jLPaketdibeli.setFont(openSansFont.deriveFont(16f));
@@ -277,25 +262,11 @@ public class Pembayaran extends JFrame {
         jLPromodipakai.setFont(openSansFont.deriveFont(16f));
         JTinputPromo.setFont(openSansFont.deriveFont(18));
         TotalHarga.setFont(openSansFont.deriveFont(24f));
-        jToggleButton4.setFont(openSansFont.deriveFont(22f));
-        jToggleButton5.setFont(openSansFont.deriveFont(22f));
-        jToggleButton3.setFont(openSansFont.deriveFont(22f));
-        jToggleButton7.setFont(openSansFont.deriveFont(22f));
-        jToggleButton8.setFont(openSansFont.deriveFont(22f));
-        jToggleButton6.setFont(openSansFont.deriveFont(22f));
-        jToggleButton9.setFont(openSansFont.deriveFont(22f));
-        jToggleButton10.setFont(openSansFont.deriveFont(22f));
-        jToggleButton11.setFont(openSansFont.deriveFont(22f));
-
-        jToggleButton4.setBackground(new Color(153, 255, 153));
-        jToggleButton5.setBackground(new Color(153, 255, 153));
-        jToggleButton3.setBackground(new Color(153, 255, 153));
-        jToggleButton7.setBackground(new Color(153, 255, 153));
-        jToggleButton8.setBackground(new Color(153, 255, 153));
-        jToggleButton6.setBackground(new Color(153, 255, 153));
-        jToggleButton9.setBackground(new Color(153, 255, 153));
-        jToggleButton10.setBackground(new Color(153, 255, 153));
-        jToggleButton11.setBackground(new Color(153, 255, 153));
+        
+        for (JToggleButton button : jToggleButtons) {
+            button.setFont(openSansFont.deriveFont(22f));
+            button.setBackground(new Color(153, 255, 153));
+        }
 
         JTinputPromo.setMargin(new Insets(2, 16, 2, 16));
         JTinputPromo.setCaretColor(new Color(0, 153, 0));
@@ -319,7 +290,8 @@ public class Pembayaran extends JFrame {
 
     public Integer getDiscountAmount(String promoCode) {
         String query = "SELECT discount_amount FROM promo_codes WHERE code = ? AND is_active = TRUE";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); 
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, promoCode);
             ResultSet rs = stmt.executeQuery();
@@ -335,6 +307,26 @@ public class Pembayaran extends JFrame {
         }
     }
 
+    private void saveTransaction(String idPelanggan, String paket, String promo, int totalHarga) {
+        String query = "INSERT INTO RiwayatTransaksi (IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL) VALUES (?, ?, ?, ?, ?, NOW())";
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+               String OO = "11111111111";
+    
+            stmt.setString(1, OO); // ID Pelanggan
+            stmt.setString(2, paket); // Paket yang dibeli
+            stmt.setString(3, promo); // Kode promo
+            stmt.setInt(4, totalHarga); // Total harga
+            stmt.setString(5, "Sukses"); // Status transaksi
+    
+            stmt.executeUpdate();
+            System.out.println("Transaksi berhasil disimpan.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void toStatus(ActionEvent evt) {
         StatusTransaksi status = new StatusTransaksi();
         status.setVisible(true);
@@ -347,11 +339,13 @@ public class Pembayaran extends JFrame {
         this.dispose();
     }
 
+    
+
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Pembayaran().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            // Provide a valid idPelanggan for the constructor
+            long idPelanggan = 1; // Example ID, replace with actual logic to get ID
+            new Pembayaran().setVisible(true);
         });
     }
 }

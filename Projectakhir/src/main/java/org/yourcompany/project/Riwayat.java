@@ -2,10 +2,7 @@ package org.yourcompany.project;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -14,6 +11,7 @@ import java.sql.*;
 public class Riwayat extends JFrame {
 
     private Font openSans;
+    private String idPelanggan; // Declare the variable to hold the ID
 
     private static final String URL = "jdbc:mysql://localhost:3306/DataBaseIanKonter";
     private static final String USER = "root";
@@ -22,7 +20,7 @@ public class Riwayat extends JFrame {
     public Riwayat() {
         loadCustomFont();
         initComponents();
-        loadRiwayatTransaksi();
+        getIdPelanggan(); // Call to get the ID from InputID
     }
 
     private void loadCustomFont() {
@@ -63,8 +61,8 @@ public class Riwayat extends JFrame {
         MAINPANEL.setBounds(0, 0, 944, 681);
         MAINPANEL.setBackground(new Color(250, 255, 250));
         getContentPane().add(MAINPANEL);
-        Border Border = BorderFactory.createLineBorder(new Color(46, 255, 44), 4);
-        MAINPANEL.setBorder(Border);
+        Border border = BorderFactory.createLineBorder(new Color(46, 255, 44), 4);
+        MAINPANEL.setBorder(border);
 
         subPanel1.setBounds(20, 120, 899, 460);
         subPanel1.setBackground(new Color(240, 240, 255));
@@ -136,17 +134,33 @@ public class Riwayat extends JFrame {
         pack();
     }
 
-    private void loadRiwayatTransaksi() {
-        String query = "SELECT IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL FROM RiwayatTransaksi";
+    private void getIdPelanggan() {
+        InputID inputIDFrame = new InputID();
+        inputIDFrame.setVisible(true); 
+        inputIDFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                Long AB = inputIDFrame.AmbilIDMeteran(); // Get the ID from InputID
+                idPelanggan = AB.toString();
+                System.out.println("ID Pelanggan: " + idPelanggan);
+                loadRiwayatTransaksi(); // Load transaction history after getting the ID
+            }
+        });
+    }
 
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+    private void loadRiwayatTransaksi() {
+        String query = "SELECT NO, IDPELANGGAN, PAKET, PROMO, TOTALHARGA, STATUS, TANGGAL FROM RiwayatTransaksi WHERE IDPELANGGAN = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, idPelanggan); // Set the ID parameter
+            ResultSet rs = stmt.executeQuery();
 
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0); // Clear existing rows
 
             int no = 1; // Row number for display
             while (rs.next()) {
-                // Retrieve data from the ResultSet
                 String idPelanggan = rs.getString("IDPELANGGAN");
                 String paket = rs.getString("PAKET");
                 String promo = rs.getString("PROMO");

@@ -11,7 +11,6 @@ public class MySQLConnector {
     private static final String DATABASE_USER = "root";
     private static final String DATABASE_PASSWORD = "";
 
-    // Method untuk menghubungkan ke database
     public Connection connect() {
         Connection connection = null;
         try {
@@ -42,33 +41,39 @@ public class MySQLConnector {
 
     public void checkAndCreateDatabaseAndTables(Connection connection) {
         try (Statement statement = connection.createStatement()) {
-            // Cek apakah database sudah ada
-            statement.executeUpdate("CREATE DATABASE IF NOT EXISTS DataBaseIanKonter");
-            System.out.println("Database checked/created.");
+            System.out.println("Database checked (assumed to exist).");
 
-            // Menggunakan database
-            statement.executeUpdate("USE DataBaseIanKonter");
-
-            // Cek dan buat tabel idpelanggan
             String createPelangganTable = "CREATE TABLE IF NOT EXISTS idpelanggan (" +
                     "IDMeteran BIGINT(20) NOT NULL, " +
-                    "NamaPelanggan VARCHAR(255) NOT NULL" +
+                    "NamaPelanggan VARCHAR(255) NOT NULL, " +
+                    "PRIMARY KEY (IDMeteran)" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
             statement.executeUpdate(createPelangganTable);
             System.out.println("Table 'idpelanggan' checked/created.");
-
-            // Cek dan buat tabel riwayattransaksi
+            
             String createRiwayatTransaksiTable = "CREATE TABLE IF NOT EXISTS riwayattransaksi (" +
-                    "NO INT(11) NOT NULL, " +
+                    "NO INT(11) AUTO_INCREMENT PRIMARY KEY, " +
                     "IDPELANGGAN BIGINT(20) NOT NULL, " +
                     "PAKET VARCHAR(25) NOT NULL, " +
                     "PROMO VARCHAR(25) NOT NULL, " +
                     "TOTALHARGA VARCHAR(27) NOT NULL, " +
                     "STATUS VARCHAR(10) NOT NULL, " +
-                    "TANGGAL VARCHAR(24) NOT NULL" +
+                    "TANGGAL VARCHAR(24) NOT NULL, " +
+                    "FOREIGN KEY (IDPELANGGAN) REFERENCES idpelanggan(IDMeteran)" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
             statement.executeUpdate(createRiwayatTransaksiTable);
             System.out.println("Table 'riwayattransaksi' checked/created.");
+
+            String createPromoCodesTable = "CREATE TABLE IF NOT EXISTS promo_codes (" +
+                    "id SERIAL PRIMARY KEY, " +
+                    "code VARCHAR(50) NOT NULL UNIQUE, " +
+                    "discount_amount INT NOT NULL, " +
+                    "is_active BOOLEAN NOT NULL DEFAULT TRUE, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;";
+            statement.executeUpdate(createPromoCodesTable);
+            System.out.println("Table 'promo_codes' checked/created.");
 
         } catch (SQLException e) {
             System.out.println("Error while checking/creating database and tables.");
@@ -77,11 +82,11 @@ public class MySQLConnector {
     }
 
     public static void main(String[] args) {
-        MySQLConnector connector = new MySQLConnector(); // Membuat instance dari MySQLConnector
-        Connection connection = connector.connect(); // Memanggil metode connect
+        MySQLConnector connector = new MySQLConnector();
+        Connection connection = connector.connect();
         if (connection != null) {
-            connector.checkAndCreateDatabaseAndTables(connection); // Memanggil metode untuk cek dan buat database serta tabel
-            connector.closeConnection(connection); // Menutup koneksi
+            connector.checkAndCreateDatabaseAndTables(connection);
+            connector.closeConnection(connection);
         }
     }
 }

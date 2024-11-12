@@ -128,7 +128,7 @@ public class StatusTransaksi extends JFrame {
     }
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        InputID InputID = new InputID();
+        MenuUtama InputID = new MenuUtama();
         InputID.setVisible(true);
         this.dispose(); 
     }
